@@ -90,8 +90,15 @@ class Game {
         $this->checkForMessage();
     }
 
+    private function clearScreen(Cursor $cursor): void
+    {
+        $cursor->moveToPosition(0, 0);
+        $cursor->clearScreen();
+    }
+
     public function run($stdin, OutputInterface $output, Cursor $cursor): void
-    {        
+    {
+        $this->clearScreen($cursor);
         $output->writeln('<fg=green>'.Title::WORDINAL_TITLE.'</>');
         $output->writeln(Instructions::WORDINAL_INSTRUCTIONS);
 
