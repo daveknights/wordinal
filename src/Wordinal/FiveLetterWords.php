@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Wordinal;
-// An edited version of https://github.com/charlesreid1/five-letter-words/blob/master/sgb-words.txt.
+// An edited version of Donald Knuth's 5757 five-letter words list.
 // Removing the less common words and those which aren't so family-friendly.
 class FiveLetterWords {
     private const FIVE_LETTER_WORDS = [
