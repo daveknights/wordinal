@@ -7,8 +7,8 @@ A version of [Wordle](https://www.nytimes.com/games/wordle/index.html) played in
 1. clone the repo locally
 2. open your terminal/console
 3. cd in to the wordinal directory
-4. install Symfony: composer install
-5. play the game: bin/console game:wordinal
+4. install Symfony: `composer install`
+5. play the game: `bin/console game:wordinal`
 
 ## Play
 - You have 6 attempts to guess a random 5 letter word*
