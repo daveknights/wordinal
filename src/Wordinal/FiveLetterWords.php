@@ -3533,6 +3533,7 @@ class FiveLetterWords {
         'baldy',
         'wonky',
         'kiwis',
+        'prang',
     ];
 
     public function checkWordInList(string $guess): bool
