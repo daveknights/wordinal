@@ -39,7 +39,7 @@ class Game {
         }
     }
 
-    private function checkWord(string $guess, OutputInterface $output): void
+    private function checkWord(string $guess, $cursor, OutputInterface $output): void
     {
         if (!$this->fiveLetterWords->checkWordInList($guess)) {
             $this->message = 'notFound';
@@ -60,6 +60,7 @@ class Game {
 
                 $this->message = 'win';
                 $this->playing = false;
+                $cursor->show();
             } else {
                 foreach($guessLetters as $key => $letter) {
                     if ($letter === $this->answer[$key]) {
@@ -81,7 +82,11 @@ class Game {
                     }
                 }
 
-                count($this->guesses) === 6 && $this->message = 'lose';
+                if (count($this->guesses) === 6)  {
+                    $this->message = 'lose';
+                    $this->playing = false;
+                    $cursor->show();
+                }
             }
 
             $this->grid->showMatchedResults($this->guessCount, $matchResults, $output);
@@ -96,15 +101,18 @@ class Game {
         $cursor->clearScreen();
     }
 
-    public function run($stdin, OutputInterface $output, Cursor $cursor): void
-    {
+    private function newGame($cursor, $output) {
         $this->clearScreen($cursor);
         $output->writeln('<fg=green>'.Title::WORDINAL_TITLE.'</>');
         $output->writeln(Instructions::WORDINAL_INSTRUCTIONS);
-
         $this->grid->init($output);
         $cursor->hide();
         $cursor->moveUp(13)->moveRight();
+    }
+
+    public function run($stdin, OutputInterface $output, Cursor $cursor): void
+    {
+        $this->newGame($cursor, $output);
 
         while (true) {            
             $keyPressed = fgets($stdin);
@@ -125,9 +133,9 @@ class Game {
 
                                 $this->message === 'notFound' && $cursor->moveDown();
 
-                                $this->checkWord($this->guesses[$this->guessCount], $output);                           
+                                $this->checkWord($this->guesses[$this->guessCount], $cursor, $output);
                                 
-                                if ($this->message === 'notFound') {    
+                                if ($this->message === 'notFound') {
                                     $this->message = '';
                                     $this->guesses[$this->guessCount] = '';                                    
                                 } else {
@@ -150,6 +158,14 @@ class Game {
                 }
 
                 $keyPressed = '';
+            } else if ($this->playing === false && strtolower($keyPressed) === 'p') {
+                // Play again
+                $this->answer = $this->fiveLetterWords->getRandomAnswer();
+                $this->guesses = [''];
+                $this->guessCount = 0;
+                $this->message = '';
+                $this->playing = true;
+                $this->newGame($cursor, $output);
             }
         }
     }

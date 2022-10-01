@@ -8,6 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class WordinalGrid
 {
     private const TOTAL_GUESSES = 6;
+    private const END_GAME_CHOICES = '<bg=white;fg=black> Press p to play again or ctrl-c to exit </>';
     private const MESSAGES = [
         'win' => ['col' => 'green', 'msg' => 'Well done you guessed the word'],
         'lose' => ['col' => 'red', 'msg' => 'Unlucky, the word was '],
@@ -64,6 +65,13 @@ class WordinalGrid
 
     public function showMessage(string $message, string $answer = ''): void
     {
-        $this->messageSection->overwrite('<fg='.self::MESSAGES[$message]["col"].'>'.self::MESSAGES[$message]["msg"].$answer.'</>');
+        $messageContent = ['<fg='.self::MESSAGES[$message]["col"].'>'.self::MESSAGES[$message]["msg"].$answer.'</>'];
+
+        if ($message === 'win' || strlen($answer)) {
+            $messageContent[] = '';
+            $messageContent[] = self::END_GAME_CHOICES;
+        }
+
+        $this->messageSection->overwrite($messageContent);
     }
 }
