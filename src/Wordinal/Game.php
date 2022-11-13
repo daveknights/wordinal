@@ -6,23 +6,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Cursor;
 
 class Game {
-    private WordinalGrid $grid;
-    private FiveLetterWords $fiveLetterWords;
-    private $playing;
     private $answer;
-    private $guesses;
-    private $guessCount;
-    private $message;
 
-    public function __construct()
-    {
-        $this->grid = new WordinalGrid();
-        $this->fiveLetterWords = new FiveLetterWords();
-        $this->playing = true;
+    public function __construct(
+        private WordinalGrid $grid = new WordinalGrid(),
+        private FiveLetterWords $fiveLetterWords = new FiveLetterWords(),
+        private bool $playing = true,
+        private array $guesses = [''],
+        private int $guessCount = 0,
+        private string $message = '',
+    ) {
         $this->answer = $this->fiveLetterWords->getRandomAnswer();
-        $this->guesses = [''];
-        $this->guessCount = 0;
-        $this->message = '';
     }
 
     private function validKeyPressed(string $key): bool
